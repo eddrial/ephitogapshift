@@ -4,14 +4,14 @@ Created on 19 Jan 2022
 @author: oqb
 '''
 
-class MyClass(object):
+class UndulatorMotion(object):
     '''
     classdocs
     '''
 
 
-    def __init__(self, params):
+    def __init__(self):
         '''
         Constructor
         '''
-        
+        self.steps = 1
