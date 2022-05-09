@@ -6,7 +6,6 @@ Created on 19 Jan 2022
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.tri import Triangulation,  CubicTriInterpolator, TriInterpolator, TriAnalyzer
-from shapely.geometry import LineString, point
 
 class UndulatorMotion(object):
     '''
@@ -66,6 +65,12 @@ class UndulatorMotion(object):
             self.phase_steps = self.phase([self.phase]).flatten()
             
             self.energy_steps, self.phase_steps = np.meshgrid(self.energy_steps, self.phase_steps)
+            
+        if len(self.energy_steps) == 1:
+            self.energy_steps = np.full(len(self.phase_steps),self.energy_steps)
+            
+        elif len(self.phase_steps) == 1:
+            self.phase_steps = np.full(len(self.energy_steps),self.phase_steps)
         
         
     def check_valid_motion(self):
@@ -83,6 +88,15 @@ class UndulatorMotion(object):
                 #store gap/shift pairs
                 self.motion[harmonic] = np.vstack((reqd_gaps.flatten(),reqd_shifts.flatten()))
                 
+                
+    def save_motion_txt(self):
+        #my_tab_header = ['#{%1s}{%10s}{%10s}{%10s}'.format('Energy', 'Poln', 'Gap', 'Shift')]
+        
+        enphase_table = np.vstack([self.energy_steps.flatten(), self.phase_steps.flatten()])
+        for harmonic in self.allowed_harmonics:
+            enphasegapshift_table = np.vstack([enphase_table,self.motion['Harmonic {}'.format(int(harmonic))]])
+            np.savetxt('motiontst_Harmonic_{}.txt'.format(harmonic), enphasegapshift_table.T, fmt = ['%10.2f','%10.2f','%10.5f','%10.5f'])
+    
 class GapShiftEnergyPhase(object):
     
     def __init__(self, table_fname= '../bin/ba_file.idt'):

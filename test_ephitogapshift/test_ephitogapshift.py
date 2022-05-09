@@ -132,9 +132,13 @@ class Test(unittest.TestCase):
         self.assertEqual(self.gsep.gap_shift_table['Harmonic 3'].__len__(), 16895, 'Input File reading incorrectly Harmonic 3')
         self.assertEqual(self.gsep.gap_shift_table['Harmonic 5'].__len__(), 18219, 'Input File reading incorrectly Harmonic 5')
         
-    def testCheckValidMotion(self):
+    def testSimpleCheckValidMotion(self):
         self.eg.check_valid_motion()
         npt.assert_array_equal(self.eg.allowed_harmonics, np.array([1.,3.]))
+        
+    def testComplexCheckValidMotion(self):
+        self.egraster.check_valid_motion()
+        npt.assert_array_equal(self.egraster.allowed_harmonics, np.array([3.]))
 
 
 
